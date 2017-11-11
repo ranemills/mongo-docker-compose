@@ -126,6 +126,18 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./share:/tmp/share
 
+  opsmanager:
+    build: ops-manager/
+    links:
+      - mongos1
+      - mongos2
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    volumes:
+     - ./share/mongodb-mms:/etc/mongodb-mms
+     - ./share:/tmp/share
+
 
 volumes:
   mongors1n1vol:
