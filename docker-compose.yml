@@ -131,6 +131,7 @@ services:
     links:
       - mongos1
       - mongos2
+      - mailcatcher
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -138,6 +139,11 @@ services:
      - ./share/mongodb-mms:/etc/mongodb-mms
      - ./share:/tmp/share
 
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports: 
+      - 1025:1025
+      - 1080:1080
 
 volumes:
   mongors1n1vol:
