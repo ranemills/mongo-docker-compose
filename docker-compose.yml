@@ -111,6 +111,7 @@ services:
       - 27017:27017
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./share:/tmp/share
 
   mongos2:
     image: mongo:3.4
@@ -123,6 +124,7 @@ services:
       - 27018:27017
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./share:/tmp/share
 
 
 volumes:
