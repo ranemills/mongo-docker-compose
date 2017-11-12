@@ -13,8 +13,6 @@ RUN curl -OL https://downloads.mongodb.com/on-prem-mms/deb/mongodb-mms_3.4.10.54
 RUN apt-get install -y realpath
 
 COPY config/conf-mms.properties /opt/mongodb/mms/conf/conf-mms.properties
-#COPY config/conf-deamon.properties /opt/mongodb/mms-backup-daemon/conf/conf-daemon.properties
-#COPY config/supervisord.conf /etc/supervisor/conf.d/ops-manager.conf
 
 COPY startup.sh /tmp/startup.sh
 RUN chmod +x /tmp/startup.sh
