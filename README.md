@@ -3,9 +3,9 @@ This repository provides a fully sharded mongo environment using docker-compose 
 
 The MongoDB environment consists of the following docker containers
 
- - **mongosrs(1-2)n(1-3)**: Mongod data server with two replica sets containing 3 nodes each (2 replica + 1 arbiter * 2 : 6 containers)
- - **mongocfg(1-3)**: Stores metadata for sharded data distribution CSRS (3 containers)
- - **mongos(1-2)**: Mongo routing service to connect to the cluster through (2 containers)
+ - **app_mongosrs(1-2)n(1-3)**: Mongod data server with two replica sets containing 3 nodes each (2 replica + 1 arbiter * 2 : 6 containers)
+ - **app_cfg(1-3)**: Stores metadata for sharded data distribution CSRS (3 containers)
+ - **app_mongos(1-2)**: Mongo routing service to connect to the cluster through (2 containers)
 
 ## Caveats
 
@@ -59,9 +59,9 @@ A Makefile is also available :
     help                 print this message
 
 
-You should now be able connect to mongos1 and the new sharded cluster from the mongos container itself using the mongo shell to connect to the running mongos process
+You should now be able connect to app_mongos1 and the new sharded cluster from the app_mongos container itself using the mongo shell to connect to the running app_mongos process
 
-    docker exec -it mongos1 mongo --port 21017
+    docker exec -it app_mongos1 mongo --port 21017
 
 ## Persistent storage
 Data is stored in docker volumes. To remove all data : `make clean`.

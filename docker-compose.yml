@@ -1,136 +1,190 @@
 version: "2"
 services:
 
-  mongors1n1:
-    image: mongo:3.4
-    command: mongod --noprealloc --smallfiles --replSet mongors1 --shardsvr --nojournal --oplogSize 16 --noauth --rest
-    environment:
-      TERM: xterm
-    expose:
-      - 27018
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - mongors1n1vol:/data/db
-
-  mongors1n2:
-    image: mongo:3.4
-    command: mongod --noprealloc --smallfiles --replSet mongors1 --shardsvr --nojournal --oplogSize 16 --noauth --rest
-    environment:
-      TERM: xterm
-    expose:
-      - 27018
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - mongors1n2vol:/data/db
-
-  mongors1n3:
-    image: mongo:3.4
-    command: mongod --noprealloc --smallfiles --replSet mongors1 --shardsvr --nojournal --oplogSize 16 --noauth --rest
-    environment:
-      TERM: xterm
-    expose:
-      - 27018
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - mongors1n3vol:/data/db
-
-  mongors2n1:
-    image: mongo:3.4
-    command: mongod --noprealloc --smallfiles --replSet mongors2 --shardsvr --nojournal --oplogSize 16 --noauth --rest
-    environment:
-      TERM: xterm
-    expose:
-      - 27018
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - mongors2n1vol:/data/db
-
-  mongors2n2:
-    image: mongo:3.4
-    command: mongod --noprealloc --smallfiles --replSet mongors2 --shardsvr --nojournal --oplogSize 16 --noauth
-    environment:
-      TERM: xterm
-    expose:
-      - 27018
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - mongors2n2vol:/data/db
-
-  mongors2n3:
-    image: mongo:3.4
-    command: mongod --noprealloc --smallfiles --replSet mongors2 --shardsvr --nojournal --oplogSize 16 --noauth
-    environment:
-      TERM: xterm
-    expose:
-      - 27018
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - mongors2n3vol:/data/db
-
-  mongocfg1:
-    image: mongo:3.4
-    command: mongod --noprealloc --smallfiles --configsvr --replSet mongocfg1 --noauth
-    environment:
-      TERM: xterm
-    expose:
-      - 27019
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - mongocfg1vol:/data/configdb
-
-  mongocfg2:
-    image: mongo:3.4
-    command: mongod --noprealloc --smallfiles --configsvr --replSet mongocfg1 --noauth
-    environment:
-      TERM: xterm
-    expose:
-      - 27019
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - mongocfg2vol:/data/configdb
-
-  mongocfg3:
-    image: mongo:3.4
-    command: mongod --noprealloc --smallfiles --configsvr --replSet mongocfg1 --noauth
-    environment:
-      TERM: xterm
-    expose:
-      - 27019
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - mongocfg3vol:/data/configdb
-
-  mongos1:
-    image: mongo:3.4
+  app_rs1n1:
+    build: mongo-with-automation
+    command: mongod --noprealloc --smallfiles --replSet app_rs1 --shardsvr --nojournal --oplogSize 16 --noauth --rest
     depends_on:
-      - mongocfg1
-      - mongocfg2
-      - mongocfg3
-    command: mongos --configdb mongocfg1/mongocfg1:27019,mongocfg2:27019,mongocfg3:27019 --port 27017
+      - opsmanager
+    links:
+      - opsmanager
+    environment:
+      TERM: xterm
+    expose:
+      - 27018
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - app_rs1n1vol:/data/db
+
+  app_rs1n2:
+    build: mongo-with-automation
+    command: mongod --noprealloc --smallfiles --replSet app_rs1 --shardsvr --nojournal --oplogSize 16 --noauth --rest
+    depends_on:
+      - opsmanager
+    links:
+      - opsmanager
+    environment:
+      TERM: xterm
+    expose:
+      - 27018
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - app_rs1n2vol:/data/db
+
+  app_rs1n3:
+    build: mongo-with-automation
+    command: mongod --noprealloc --smallfiles --replSet app_rs1 --shardsvr --nojournal --oplogSize 16 --noauth --rest
+    depends_on:
+      - opsmanager
+    links:
+      - opsmanager
+    environment:
+      TERM: xterm
+    expose:
+      - 27018
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - app_rs1n3vol:/data/db
+
+  app_rs2n1:
+    build: mongo-with-automation
+    command: mongod --noprealloc --smallfiles --replSet app_rs2 --shardsvr --nojournal --oplogSize 16 --noauth --rest
+    depends_on:
+      - opsmanager
+    links:
+      - opsmanager
+    environment:
+      TERM: xterm
+    expose:
+      - 27018
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - app_rs2n1vol:/data/db
+
+  app_rs2n2:
+    build: mongo-with-automation
+    command: mongod --noprealloc --smallfiles --replSet app_rs2 --shardsvr --nojournal --oplogSize 16 --noauth
+    depends_on:
+      - opsmanager
+    links:
+      - opsmanager
+    environment:
+      TERM: xterm
+    expose:
+      - 27018
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - app_rs2n2vol:/data/db
+
+  app_rs2n3:
+    build: mongo-with-automation
+    command: mongod --noprealloc --smallfiles --replSet app_rs2 --shardsvr --nojournal --oplogSize 16 --noauth
+    depends_on:
+      - opsmanager
+    links:
+      - opsmanager
+    environment:
+      TERM: xterm
+    expose:
+      - 27018
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - app_rs2n3vol:/data/db
+
+  app_cfg1:
+    build: mongo-with-automation
+    command: mongod --noprealloc --smallfiles --configsvr --replSet app_cfg1 --noauth
+    depends_on:
+      - opsmanager
+    links:
+      - opsmanager
+    environment:
+      TERM: xterm
+    expose:
+      - 27019
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - app_cfg1vol:/data/configdb
+
+  app_cfg2:
+    build: mongo-with-automation
+    command: mongod --noprealloc --smallfiles --configsvr --replSet app_cfg1 --noauth
+    depends_on:
+      - opsmanager
+    links:
+      - opsmanager
+    environment:
+      TERM: xterm
+    expose:
+      - 27019
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - app_cfg2vol:/data/configdb
+
+  app_cfg3:
+    build: mongo-with-automation
+    command: mongod --noprealloc --smallfiles --configsvr --replSet app_cfg1 --noauth
+    depends_on:
+      - opsmanager
+    links:
+      - opsmanager
+    environment:
+      TERM: xterm
+    expose:
+      - 27019
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - app_cfg3vol:/data/configdb
+
+  app_mongos1:
+    build: mongo-with-automation
+    depends_on:
+      - app_cfg1
+      - app_cfg2
+      - app_cfg3
+      - opsmanager
+    command: mongos --configdb app_cfg1/app_cfg1:27019,app_cfg2:27019,app_cfg3:27019 --port 27017
+    links:
+      - opsmanager
     ports:
       - 27017:27017
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./share:/tmp/share
 
-  mongos2:
-    image: mongo:3.4
+  app_mongos2:
+    build: mongo-with-automation
     depends_on:
-      - mongocfg1
-      - mongocfg2
-      - mongocfg3
-    command: mongos --configdb mongocfg1/mongocfg1:27019,mongocfg2:27019,mongocfg3:27019 --port 27017
+      - app_cfg1
+      - app_cfg2
+      - app_cfg3
+      - opsmanager
+    command: mongos --configdb app_cfg1/app_cfg1:27019,app_cfg2:27019,app_cfg3:27019 --port 27017
+    links:
+      - opsmanager
     ports:
       - 27018:27017
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./share:/tmp/share
 
+  opsmanager_mongo:
+    image: mongo:3.4
+    command: mongod --noprealloc --smallfiles --oplogSize 16 --noauth --rest
+    environment:
+      TERM: xterm
+    expose:
+      - 27017
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - opsmanager_mongovol:/data/db
+
   opsmanager:
     build: ops-manager/
+    depends_on:
+      - opsmanager_mongo
     links:
-      - mongos1
-      - mongos2
+      - opsmanager_mongo
       - mailcatcher
     ports:
       - "8080:8080"
@@ -146,12 +200,13 @@ services:
       - 1080:1080
 
 volumes:
-  mongors1n1vol:
-  mongors1n2vol:
-  mongors1n3vol:
-  mongors2n1vol:
-  mongors2n2vol:
-  mongors2n3vol:
-  mongocfg1vol:
-  mongocfg2vol:
-  mongocfg3vol:
+  app_rs1n1vol:
+  app_rs1n2vol:
+  app_rs1n3vol:
+  app_rs2n1vol:
+  app_rs2n2vol:
+  app_rs2n3vol:
+  app_cfg1vol:
+  app_cfg2vol:
+  app_cfg3vol:
+  opsmanager_mongovol:

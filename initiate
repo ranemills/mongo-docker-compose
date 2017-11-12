@@ -2,20 +2,20 @@
 
 for (( rs = 1; rs < 3; rs++ )); do
   echo "Intializing replica ${rs} set"
-  docker-compose exec mongos1 bash -c "/tmp/share/wait-for-it.sh mongors${rs}n1:27018;/tmp/share/wait-for-it.sh mongors${rs}n2:27018;/tmp/share/wait-for-it.sh mongors${rs}n3:27018;"
-  replicate="rs.initiate(); sleep(1000); cfg = rs.conf(); cfg.members[0].host = \"mongors${rs}n1:27018\"; sleep(1000);rs.reconfig(cfg); rs.add(\"mongors${rs}n2:27018\"); rs.addArb(\"mongors${rs}n3:27018\"); rs.status();"
-  docker-compose exec mongors${rs}n1 bash -c "echo '${replicate}' | mongo --port 27018"
+  docker-compose exec app_mongos1 bash -c "/tmp/share/wait-for-it.sh app_rs${rs}n1:27018;/tmp/share/wait-for-it.sh app_rs${rs}n2:27018;/tmp/share/wait-for-it.sh app_rs${rs}n3:27018;"
+  replicate="rs.initiate(); sleep(1000); cfg = rs.conf(); cfg.members[0].host = \"app_rs${rs}n1:27018\"; sleep(1000);rs.reconfig(cfg); rs.add(\"app_rs${rs}n2:27018\"); rs.addArb(\"app_rs${rs}n3:27018\"); rs.status();"
+  docker-compose exec app_rs${rs}n1 bash -c "echo '${replicate}' | mongo --port 27018"
 done
 
 echo "Intializing replica set for mongoconfig"
-replicate="rs.initiate(); sleep(1000); cfg = rs.conf(); cfg.members[0].host = \"mongocfg1:27019\"; rs.reconfig(cfg); rs.add(\"mongocfg2:27019\"); rs.add(\"mongocfg3:27019\"); rs.status();"
-docker-compose exec mongocfg1 bash -c "echo '${replicate}' | mongo --port 27019"
+replicate="rs.initiate(); sleep(1000); cfg = rs.conf(); cfg.members[0].host = \"app_cfg1:27019\"; rs.reconfig(cfg); rs.add(\"app_cfg2:27019\"); rs.add(\"app_cfg3:27019\"); rs.status();"
+docker-compose exec app_cfg1 bash -c "echo '${replicate}' | mongo --port 27019"
 
 
-docker-compose exec mongos1 bash -c "/tmp/share/wait-for-it.sh mongocfg1:27019;/tmp/share/wait-for-it.sh mongocfg2:27019;/tmp/share/wait-for-it.sh mongocfg1:27019;"
+docker-compose exec app_mongos1 bash -c "/tmp/share/wait-for-it.sh app_cfg1:27019;/tmp/share/wait-for-it.sh app_cfg2:27019;/tmp/share/wait-for-it.sh app_cfg1:27019;"
 
-# Add better mechanisum to wait for mongos connectivity to be
+# Add better mechanisum to wait for app_mongos connectivity to be
 # established by tailing docker log for connection readiness
 echo "Intializing shards through router"
-docker-compose exec mongos1 bash -c "/tmp/share/wait-for-it.sh -t 60 mongos1:27017;/tmp/share/wait-for-it.sh mongos2:27017"
-docker-compose exec mongos1 bash -c "echo \"sh.addShard('mongors1/mongors1n1:27018,mongors1n2:27018'); sh.addShard('mongors2/mongors2n1:27018,mongors2n2:27018');sh.status()\" | mongo "
+docker-compose exec app_mongos1 bash -c "/tmp/share/wait-for-it.sh -t 60 app_mongos1:27017;/tmp/share/wait-for-it.sh app_mongos2:27017"
+docker-compose exec app_mongos1 bash -c "echo \"sh.addShard('app_rs1/app_rs1n1:27018,app_rs1n2:27018'); sh.addShard('app_rs2/app_rs2n1:27018,app_rs2n2:27018');sh.status()\" | mongo "
