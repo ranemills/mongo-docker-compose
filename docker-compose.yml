@@ -38,7 +38,7 @@ services:
       - 27017
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - opsmanager_mongovol:/data/db
+      - ./share/opsmanager_mongo/data:/data/db
 
   opsmanager:
     build: ops-manager/
@@ -51,14 +51,11 @@ services:
       - "8080:8080"
       - "8081:8081"
     volumes:
-     - ./share/mongodb-mms:/etc/mongodb-mms
-     - ./share:/tmp/share
+     - ./share/opsmanager/mongodb-mms:/etc/mongodb-mms
+     - ./share/all:/tmp/share/all
 
   mailcatcher:
     image: schickling/mailcatcher
     ports: 
       - 1025:1025
       - 1080:1080
-
-volumes:
-  opsmanager_mongovol:
