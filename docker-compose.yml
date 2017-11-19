@@ -31,7 +31,7 @@ services:
 
   opsmanager_mongo:
     image: mongo:3.4
-    command: mongod --noprealloc --smallfiles --dbpath /data/db --nojournal --oplogSize 16 --noauth
+    command: mongod --noprealloc --smallfiles --dbpath /data/db --oplogSize 16 --noauth
     environment:
       TERM: xterm
     expose:
