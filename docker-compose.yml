@@ -38,7 +38,7 @@ services:
       - 27017
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./share/opsmanager_mongo/data:/data/db
+      - ${OPSMANAGER_DATA}:/data/db
 
   opsmanager:
     build: ops-manager/
